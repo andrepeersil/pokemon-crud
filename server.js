@@ -10,10 +10,6 @@ app.use(express.json());
 
 app.use(express.static('public'));
 
-app.listen(PORT, () => {
-    console.log(`Servidor rodando na porta ${PORT}`);
-});
-
 let pokemons = require('./pokemons.json');
 
 app.use(express.json());
