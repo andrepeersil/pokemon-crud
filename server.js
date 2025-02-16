@@ -1,5 +1,4 @@
 require('dotenv').config();
-
 const express = require('express');
 const axios = require('axios');
 const fs = require('fs');
@@ -10,15 +9,15 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());  
 app.use(express.json());
 
+// Conexão com o banco de dados PostgreSQL
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+      rejectUnauthorized: false
+    }
+ });
+
 app.use(express.static('public'));
-
-let pokemons = require('./pokemons.json');
-
-app.use(express.json());
-
-app.get('/pokemons', (req, res) => {
-    res.json(pokemons);
-});
 
 // Função para pegar todos os pokémons
 app.get('/pokemons', async (req, res) => {
