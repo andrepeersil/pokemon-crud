@@ -3,7 +3,8 @@ const axios = require('axios');
 const fs = require('fs');
 const cors = require('cors');  
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
+
 
 app.use(cors());  
 app.use(express.json());
@@ -25,7 +26,6 @@ app.get('/pokemon/:name', async (req, res) => {
         res.status(404).json({ message: 'Pokémon não encontrado' });
     }
 });
-
 
 // Rota para criar um Pokémon (simulando um banco de dados)
 app.post('/pokemons', (req, res) => {
