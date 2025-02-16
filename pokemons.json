@@ -1,0 +1,26 @@
+[
+  {
+    "id": 5,
+    "name": "Squirtle",
+    "type": "Water"
+  },
+  {
+    "id": 1,
+    "name": "Charmander",
+    "type": "Fire"
+  },
+  {
+    "id": 2,
+    "name": "Zezin",
+    "type": "Faz nada"
+  },
+  {
+    "id": 3,
+    "name": "Novo Pokemon",
+    "type": "Qualquer coisa"
+  },
+  {
+    "name": "Vamo ve",
+    "type": "Se funciona"
+  }
+]

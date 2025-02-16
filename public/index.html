@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD Pokémon</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>CRUD Pokémon</h1>
+
+        <!-- Formulário para Adicionar Pokémon -->
+        <h2>Adicionar Pokémon</h2>
+        <form id="createForm">
+            <input type="text" id="name" placeholder="Nome do Pokémon" required>
+            <input type="text" id="type" placeholder="Tipo do Pokémon" required>
+            <button type="submit">Adicionar Pokémon</button>
+        </form>
+
+        <!-- Formulário para Atualizar Pokémon -->
+        <h2>Atualizar Pokémon</h2>
+        <form id="updateForm">
+            <input type="text" id="updateName" placeholder="Nome do Pokémon para Atualizar" required>
+            <input type="text" id="updateType" placeholder="Novo Tipo" required>
+            <button type="submit">Atualizar Pokémon</button>
+        </form>
+
+        <!-- Formulário para Deletar Pokémon -->
+        <h2>Deletar Pokémon</h2>
+        <form id="deleteForm">
+            <input type="text" id="deleteName" placeholder="Nome do Pokémon para Deletar" required>
+            <button type="submit">Deletar Pokémon</button>
+        </form>
+
+    <!-- Exibição dos Pokémons -->
+    <h2>Lista de Pokémons</h2></br>
+    <div id="pokemonList"></div> <!-- Certifique-se de que o id está correto -->
+
+    <script src="app.js"></script>
+</body>
+</html>
