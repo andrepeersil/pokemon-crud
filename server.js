@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const axios = require('axios');
 const fs = require('fs');
@@ -18,58 +20,73 @@ app.get('/pokemons', (req, res) => {
     res.json(pokemons);
 });
 
-app.get('/pokemon/:name', async (req, res) => {
+// Função para pegar todos os pokémons
+app.get('/pokemons', async (req, res) => {
+    try {
+      const result = await pool.query('SELECT * FROM pokemons');
+      res.json(result.rows); // Retorna os Pokémons do banco de dados
+    } catch (error) {
+      res.status(500).json({ message: 'Erro ao buscar Pokémons', error });
+    }
+  });
+  
+  // Função para pegar um Pokémon específico
+  app.get('/pokemon/:name', async (req, res) => {
     const pokemonName = req.params.name;
-
     try {
-        const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`);
-        res.json(response.data);
-    } catch (error) {
+      const result = await pool.query('SELECT * FROM pokemons WHERE name = $1', [pokemonName]);
+      if (result.rows.length > 0) {
+        res.json(result.rows[0]);
+      } else {
         res.status(404).json({ message: 'Pokémon não encontrado' });
-    }
-});
-
-// Rota para criar um Pokémon (simulando um banco de dados)
-app.post('/pokemons', (req, res) => {
-    const newPokemon = req.body;
-    pokemons.push(newPokemon);
-    try {
-        fs.writeFileSync('pokemons.json', JSON.stringify(pokemons, null, 2));
-        console.log("Arquivo pokemons.json atualizado com sucesso!");
+      }
     } catch (error) {
-        console.error("Erro ao atualizar o arquivo:", error);
+      res.status(500).json({ message: 'Erro ao buscar Pokémon', error });
     }
-    res.status(201).json(newPokemon);
-});
-
-// Rota para atualizar um Pokémon
-app.put('/pokemons/:name', (req, res) => {
-    const name = req.params.name;
-    const updatedData = req.body;
-
-    let found = false;
-    pokemons = pokemons.map(pokemon => {
-        if (pokemon.name === name) {
-            found = true;
-            return { ...pokemon, ...updatedData };
-        }
-        return pokemon;
-    });
-
-    if (found) {
-        res.json({ message: 'Pokémon atualizado!' });
-    } else {
-        res.status(404).json({ message: 'Pokémon não encontrado!' });
+  });
+  
+  // Função para adicionar um Pokémon
+  app.post('/pokemons', async (req, res) => {
+    const { name, type } = req.body;
+    try {
+      const result = await pool.query('INSERT INTO pokemons (name, type) VALUES ($1, $2) RETURNING *', [name, type]);
+      res.status(201).json(result.rows[0]); // Retorna o Pokémon adicionado
+    } catch (error) {
+      res.status(500).json({ message: 'Erro ao adicionar Pokémon', error });
     }
-});
-
-// Rota para excluir um Pokémon
-app.delete('/pokemons/:name', (req, res) => {
+  });
+  
+  // Função para atualizar um Pokémon
+  app.put('/pokemons/:name', async (req, res) => {
     const name = req.params.name;
-    pokemons = pokemons.filter(pokemon => pokemon.name !== name);
-
-    res.json({ message: 'Pokémon excluído!' });
-});
+    const { type } = req.body;
+    try {
+      const result = await pool.query('UPDATE pokemons SET type = $1 WHERE name = $2 RETURNING *', [type, name]);
+      if (result.rows.length > 0) {
+        res.json({ message: 'Pokémon atualizado', pokemon: result.rows[0] });
+      } else {
+        res.status(404).json({ message: 'Pokémon não encontrado' });
+      }
+    } catch (error) {
+      res.status(500).json({ message: 'Erro ao atualizar Pokémon', error });
+    }
+  });
+  
+  // Função para excluir um Pokémon
+  app.delete('/pokemons/:name', async (req, res) => {
+    const name = req.params.name;
+    try {
+      const result = await pool.query('DELETE FROM pokemons WHERE name = $1 RETURNING *', [name]);
+      if (result.rows.length > 0) {
+        res.json({ message: 'Pokémon excluído', pokemon: result.rows[0] });
+      } else {
+        res.status(404).json({ message: 'Pokémon não encontrado' });
+      }
+    } catch (error) {
+      res.status(500).json({ message: 'Erro ao excluir Pokémon', error });
+    }
+  });
+  
 
 
 app.listen(PORT, () => {
