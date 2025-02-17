@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const pokemonList = document.getElementById('pokemonList');
 
     const loadPokemons = async () => {
-        const response = await fetch('http://pokemon-crud-production.up.railway.app/pokemons');
+        const response = await fetch('https://pokemon-crud-production.up.railway.app/pokemons');
         const pokemons = await response.json();
         
         console.log(pokemons);  // Verifique os dados recebidos da API
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const name = document.getElementById('name').value;
         const type = document.getElementById('type').value;
 
-        const response = await fetch('http://pokemon-crud-production.up.railway.app/pokemons', {
+        const response = await fetch('https://pokemon-crud-production.up.railway.app/pokemons', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({id, name, type})
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const name = document.getElementById('updateName').value;
         const type = document.getElementById('updateType').value;
 
-        const response = await fetch(`http://pokemon-crud-production.up.railway.app/pokemons/${name}`, {
+        const response = await fetch(`https://pokemon-crud-production.up.railway.app/pokemons/${name}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ type })
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const name = document.getElementById('deleteName').value;
 
-        const response = await fetch(`http://pokemon-crud-production.up.railway.app/pokemons/${name}`, {
+        const response = await fetch(`https://pokemon-crud-production.up.railway.app/pokemons/${name}`, {
             method: 'DELETE',
         });
 
