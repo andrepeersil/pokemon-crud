@@ -9,7 +9,13 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());  
+const corsOptions = {
+  origin: '*', // Permite todas as origens. Caso queira restringir, substitua '*' pelo domínio do seu front-end.
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Permite os métodos que seu app usa.
+  allowedHeaders: ['Content-Type'], // Permite cabeçalhos específicos.
+};
+
+app.use(cors(corsOptions));  
 app.use(express.json());
 
 // Conexão com o banco de dados PostgreSQL
@@ -49,9 +55,9 @@ app.get('/pokemons', async (req, res) => {
   
   // Função para adicionar um Pokémon
   app.post('/pokemons', async (req, res) => {
-    const { name, type } = req.body;
+    const { id, name, type } = req.body;
     try {
-      const result = await pool.query('INSERT INTO pokemons (name, type) VALUES ($1, $2) RETURNING *', [name, type]);
+      const result = await pool.query('INSERT INTO pokemons (id, name, type) VALUES ($1, $2, $3) RETURNING *', [id, name, type]);
       res.status(201).json(result.rows[0]); // Retorna o Pokémon adicionado
     } catch (error) {
       res.status(500).json({ message: 'Erro ao adicionar Pokémon', error });
