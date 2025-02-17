@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 document.addEventListener('DOMContentLoaded', () => {
     const createForm = document.getElementById('createForm');
     const updateForm = document.getElementById('updateForm');
